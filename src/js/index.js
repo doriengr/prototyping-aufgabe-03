@@ -49,9 +49,6 @@ function checkIfSet() {
         deck.cards[selectedCards[2]],
     ];
 
-    console.log(selectedCards)
-    console.log(deck.cards);
-
     if (isSet(matchingCards[0], matchingCards[1], matchingCards[2])) {
         deck.cards.forEach((card, index) => {
             if (selectedCards.includes(index)) {

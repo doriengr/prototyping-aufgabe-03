@@ -76,13 +76,11 @@ export class Deck {
         const missingCardsCount = 9 - this.cards.length;
         if (missingCardsCount === 0) return [];
 
-        const newRevealedCards = this.generateNewCards(missingCardsCount);
-
-        return newRevealedCards;
+        return this.generateNewCards(missingCardsCount);
     }
 
     generateNewCards(missingCardsCount){
-        const newRevealedCards = [];
+        let newRevealedCards = [];
         const combinations = this.findCombinations(Array.from(this.cards).slice(), 2);
 
         for (const combination of combinations) {
@@ -104,6 +102,10 @@ export class Deck {
             this.deck.splice(randomIndex, 1);
             newRevealedCards.push(this.displayNewHtmlCard(randomCard, 'false'));
         }
+
+        newRevealedCards = this.shuffleOptions(newRevealedCards).map(card => {
+            return this.htmlList.appendChild(card);
+        })
 
         this.cards = document.querySelectorAll('.card');
         return newRevealedCards;
@@ -133,7 +135,7 @@ export class Deck {
         newHtmlCard.setAttribute('data-form', card.form);
         newHtmlCard.setAttribute('data-rotation', card.rotation);
 
-        return this.htmlList.appendChild(newHtmlCard);
+        return newHtmlCard;
     }
 
     findMatchingCardInDeck(combination) {
@@ -160,7 +162,8 @@ export class Deck {
             }
         };
         combine(0, []);
-        return combinations;
+
+        return this.shuffleOptions(combinations);
     }
 
     printCards() {
@@ -172,5 +175,14 @@ export class Deck {
 
             card.appendChild(text);
         });
+    }
+
+    shuffleOptions(combinations) {
+        for (let i = combinations.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [combinations[i], combinations[j]] = [combinations[j], combinations[i]];
+        }
+
+        return combinations;
     }
 }
