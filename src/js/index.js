@@ -24,7 +24,7 @@ function handleSelectedCards(card) {
     if (selectedCards.length === 3) {
         if (checkIfSet()) {
             const newCards = deck.redrawCards();
-            // eventListener(newCards);
+            eventListener(newCards);
             selectedCards = [];
         } else {
             // TODO Statement for lost
@@ -48,6 +48,9 @@ function checkIfSet() {
         deck.cards[selectedCards[1]],
         deck.cards[selectedCards[2]],
     ];
+
+    console.log(selectedCards)
+    console.log(deck.cards);
 
     if (isSet(matchingCards[0], matchingCards[1], matchingCards[2])) {
         deck.cards.forEach((card, index) => {

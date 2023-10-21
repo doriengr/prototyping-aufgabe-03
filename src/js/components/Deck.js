@@ -89,10 +89,9 @@ export class Deck {
             const matchingCard = this.findMatchingCardInDeck(combination);
 
             if (matchingCard) {
-                newRevealedCards.push(matchingCard);
                 this.highlightedSet(combination);
                 this.deck = this.deck.filter(card => card !== matchingCard);
-                this.displayNewHtmlCard(matchingCard, 'true');
+                newRevealedCards.push(this.displayNewHtmlCard(matchingCard, 'true'));
                 break;
             } else {
                 // TODO No matching cards in deck anymore
@@ -102,11 +101,11 @@ export class Deck {
         while (newRevealedCards.length < missingCardsCount) {
             const randomIndex = Math.floor(Math.random() * this.deck.length);
             const randomCard = this.deck[randomIndex];
-            newRevealedCards.push(randomCard);
             this.deck.splice(randomIndex, 1);
-            this.displayNewHtmlCard(randomCard, 'false');
+            newRevealedCards.push(this.displayNewHtmlCard(randomCard, 'false'));
         }
 
+        this.cards = document.querySelectorAll('.card');
         return newRevealedCards;
     }
 
@@ -121,20 +120,20 @@ export class Deck {
     }
 
     displayNewHtmlCard(card, isCardASet) {
-            const newHtmlCard = document.createElement("li");
-            const text = document.createElement("p");
-            text.innerHTML = `Color: ${card.color}<br>
-                Rotation: ${card.rotation}<br>
-                Form: ${card.form}`;
+        const newHtmlCard = document.createElement("li");
+        const text = document.createElement("p");
+        text.innerHTML = `Color: ${card.color}<br>
+            Rotation: ${card.rotation}<br>
+            Form: ${card.form}`;
 
-            newHtmlCard.appendChild(text);
-            newHtmlCard.classList.add('card');
-            newHtmlCard.setAttribute('data-isset', isCardASet);
-            newHtmlCard.setAttribute('data-color', card.color);
-            newHtmlCard.setAttribute('data-form', card.form);
-            newHtmlCard.setAttribute('data-rotation', card.rotation);
+        newHtmlCard.appendChild(text);
+        newHtmlCard.classList.add('card');
+        newHtmlCard.setAttribute('data-isset', isCardASet);
+        newHtmlCard.setAttribute('data-color', card.color);
+        newHtmlCard.setAttribute('data-form', card.form);
+        newHtmlCard.setAttribute('data-rotation', card.rotation);
 
-            this.htmlList.appendChild(newHtmlCard);
+        return this.htmlList.appendChild(newHtmlCard);
     }
 
     findMatchingCardInDeck(combination) {
