@@ -64,6 +64,7 @@ export class Deck {
                         this.cards[i].setAttribute('data-isset', 'true');
                         this.cards[j].setAttribute('data-isset', 'true');
                         this.cards[k].setAttribute('data-isset', 'true');
+
                         return true;
                     }
                 }
@@ -75,6 +76,12 @@ export class Deck {
     redrawCards() {
         const missingCardsCount = 9 - this.cards.length;
         if (missingCardsCount === 0) return [];
+
+        if (this.deck.length <= 3) {
+            console.log('Nichts mehr');
+            // TODO add notice
+            return;
+        }
 
         return this.generateNewCards(missingCardsCount);
     }

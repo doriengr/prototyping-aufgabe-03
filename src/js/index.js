@@ -7,6 +7,8 @@ let selectedCards = [];
 init();
 
 function eventListener(cards) {
+    if (! cards) return;
+
     cards.forEach(card => {
         card.addEventListener('click', () =>  handleSelectedCards(card));
     })
