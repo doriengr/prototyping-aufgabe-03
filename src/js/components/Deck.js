@@ -81,9 +81,7 @@ export class Deck {
         if (missingCardsCount === 0) return [];
 
         if (this.deck.length <= 3) {
-            console.log('Nichts mehr');
-            // TODO add notice
-            return;
+            return [];
         }
 
         return this.generateNewCards(missingCardsCount);
@@ -102,7 +100,7 @@ export class Deck {
                 newRevealedCards.push(this.displayNewHtmlCard(matchingCard, 'true'));
                 break;
             } else {
-                // TODO No matching cards in deck anymore
+                return [];
             }
         }
 

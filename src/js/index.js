@@ -6,12 +6,12 @@ let selectedCards = [];
 let livesWrapper = document.querySelector('.cards__count');
 
 let count = 3;
-let gameLost = false;
+let gameEnd = false;
 
 init();
 
 function eventListener(cards) {
-    if (! cards || gameLost) return;
+    if (! cards || gameEnd) return;
 
     cards.forEach(card => {
         card.addEventListener('click', () =>  handleSelectedCards(card));
@@ -21,7 +21,7 @@ function eventListener(cards) {
 function handleSelectedCards(card) {
     const index = getIndex(card);
     if (index === -1) return;
-    if (selectedCards.length >= 3 || gameLost) return;
+    if (selectedCards.length >= 3 || gameEnd) return;
 
     selectedCards.includes(index)
         ? deleteIndex(index, card)
@@ -30,6 +30,11 @@ function handleSelectedCards(card) {
     if (selectedCards.length === 3) {
         if (checkIfSet()) {
             const newCards = deck.redrawCards();
+            if (newCards.length === 0) {
+                gameEnd = true;
+                const win = document.querySelector('.win');
+                if (win) win.classList.add('win--show');
+            }
             eventListener(newCards);
             selectedCards = [];
             addCount();
@@ -108,7 +113,7 @@ function subtractCount() {
 
     if (livesWrapper.children.length === 0) {
         document.querySelector('main').classList.add('main--full-game-lost');
-        gameLost = true;
+        gameEnd = true;
         const lost = document.querySelector('.lost');
         if (lost) lost.classList.add('lost--show');
     }
