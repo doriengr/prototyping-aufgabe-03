@@ -43,7 +43,7 @@ export class Deck {
             card.setAttribute('data-color', this.deck[randomIndex].color);
             card.setAttribute('data-form', this.deck[randomIndex].form);
             card.setAttribute('data-rotation', this.deck[randomIndex].rotation);
-            card.setAttribute('data-is-set', 'false');
+            card.setAttribute('data-isset', 'false');
         });
     }
 
@@ -61,9 +61,9 @@ export class Deck {
             for (let j = i + 1; j < this.cards.length - 1; j++) {
                 for (let k = j + 1; k < this.cards.length; k++) {
                     if (isSet(this.cards[i], this.cards[j], this.cards[k])) {
-                        this.cards[i].setAttribute('data-is-set', 'true');
-                        this.cards[j].setAttribute('data-is-set', 'true');
-                        this.cards[k].setAttribute('data-is-set', 'true');
+                        this.cards[i].setAttribute('data-isset', 'true');
+                        this.cards[j].setAttribute('data-isset', 'true');
+                        this.cards[k].setAttribute('data-isset', 'true');
                         return true;
                     }
                 }
@@ -77,7 +77,6 @@ export class Deck {
         if (missingCardsCount === 0) return [];
 
         const newRevealedCards = this.generateNewCards(missingCardsCount);
-        this.displayNewHtmlCards(newRevealedCards);
 
         return newRevealedCards;
     }
@@ -91,29 +90,51 @@ export class Deck {
 
             if (matchingCard) {
                 newRevealedCards.push(matchingCard);
-                matchingCard.isSet = true;
+                this.highlightedSet(combination);
                 this.deck = this.deck.filter(card => card !== matchingCard);
+                this.displayNewHtmlCard(matchingCard, 'true');
+                break;
             } else {
                 // TODO No matching cards in deck anymore
             }
-
-            if (newRevealedCards.length >= missingCardsCount) break;
         }
+
+        while (newRevealedCards.length < missingCardsCount) {
+            const randomIndex = Math.floor(Math.random() * this.deck.length);
+            const randomCard = this.deck[randomIndex];
+            newRevealedCards.push(randomCard);
+            this.deck.splice(randomIndex, 1);
+            this.displayNewHtmlCard(randomCard, 'false');
+        }
+
         return newRevealedCards;
     }
 
-    displayNewHtmlCards(newRevealedCards) {
-        for (const newCard of newRevealedCards) {
+    highlightedSet(combination) {
+        this.cards.forEach(card => {
+            combination.forEach(node => {
+                if (card.isEqualNode(node)) {
+                    card.dataset.isset = 'true';
+                }
+            })
+        });
+    }
+
+    displayNewHtmlCard(card, isCardASet) {
             const newHtmlCard = document.createElement("li");
             const text = document.createElement("p");
-            text.innerHTML = `Color: ${newCard.color}<br>
-                Rotation: ${newCard.rotation}<br>
-                Form: ${newCard.form}}`;
+            text.innerHTML = `Color: ${card.color}<br>
+                Rotation: ${card.rotation}<br>
+                Form: ${card.form}`;
 
             newHtmlCard.appendChild(text);
             newHtmlCard.classList.add('card');
+            newHtmlCard.setAttribute('data-isset', isCardASet);
+            newHtmlCard.setAttribute('data-color', card.color);
+            newHtmlCard.setAttribute('data-form', card.form);
+            newHtmlCard.setAttribute('data-rotation', card.rotation);
+
             this.htmlList.appendChild(newHtmlCard);
-        }
     }
 
     findMatchingCardInDeck(combination) {
@@ -148,7 +169,7 @@ export class Deck {
             const text = document.createElement("p");
             text.innerHTML = `Color: ${card.dataset.color}<br>
                 Rotation: ${card.dataset.rotation}<br>
-                Form: ${card.dataset.rotation}}`;
+                Form: ${card.dataset.form}`;
 
             card.appendChild(text);
         });

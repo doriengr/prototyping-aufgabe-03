@@ -19,6 +19,7 @@
     display: flex;
     justify-content: center;
     align-content: center;
+    cursor: pointer;
 }
 
 .card__image {
@@ -28,7 +29,7 @@
 }
 
 
-li[data-is-set="true"] {
+li[data-isSet="true"] {
     background: red;
 }
 

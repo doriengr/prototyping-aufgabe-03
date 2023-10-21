@@ -6,18 +6,20 @@ let selectedCards = [];
 
 init();
 
-function eventListener(htmlCards) {
-    htmlCards.forEach((htmlCard, index) => {
-        htmlCard.addEventListener('click', () =>  handleSelectedCards(htmlCard, index));
+function eventListener(cards) {
+    cards.forEach(card => {
+        card.addEventListener('click', () =>  handleSelectedCards(card));
     })
 }
 
-function handleSelectedCards(htmlCard, index) {
+function handleSelectedCards(card) {
+    const index = getIndex(card);
+    if (index === -1) return;
     if (selectedCards.length >= 3) return;
 
     selectedCards.includes(index)
-        ? deleteIndex(index, htmlCard)
-        : addIndex(index, htmlCard);
+        ? deleteIndex(index, card)
+        : addIndex(index, card);
 
     if (selectedCards.length === 3) {
         if (checkIfSet()) {
@@ -28,6 +30,16 @@ function handleSelectedCards(htmlCard, index) {
             // TODO Statement for lost
         }
     }
+}
+
+function getIndex(element) {
+    const elements = document.querySelectorAll('.card');
+    for (let i = 0; i < elements.length; i++) {
+        if (elements[i] === element) {
+            return i;
+        }
+    }
+    return -1;
 }
 
 function checkIfSet() {

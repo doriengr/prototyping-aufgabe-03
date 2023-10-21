@@ -3,6 +3,5 @@ export class Card {
         this.color = color;
         this.rotation = rotation;
         this.form = form;
-        this.isSet = false;
     }
 }
