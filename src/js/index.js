@@ -14,7 +14,10 @@ function eventListener(cards) {
     if (! cards || gameEnd) return;
 
     cards.forEach(card => {
-        card.addEventListener('click', () =>  handleSelectedCards(card));
+        card.addEventListener('click', function() {
+            handleSelectedCards(card);
+            new Audio('/assets/key.wav').play();
+        });
     })
 }
 
@@ -33,7 +36,9 @@ function handleSelectedCards(card) {
             if (newCards.length === 0) {
                 gameEnd = true;
                 const win = document.querySelector('.win');
+                document.querySelector('main').classList.add('main--full-game-won');
                 if (win) win.classList.add('win--show');
+                new Audio('/assets/game-won.mp3').play();
             }
             eventListener(newCards);
             selectedCards = [];
@@ -97,11 +102,12 @@ function resetClasses() {
 
 function addCount() {
     count++
+    new Audio('/assets/successful.wav').play();
+
     const newLive = document.createElement("img");
     newLive.src = "assets/hearts-red.svg";
     newLive.classList.add('cards__count-item');
     livesWrapper.appendChild(newLive);
-    console.log(count);
 }
 
 function subtractCount() {
@@ -116,6 +122,9 @@ function subtractCount() {
         gameEnd = true;
         const lost = document.querySelector('.lost');
         if (lost) lost.classList.add('lost--show');
+        new Audio('/assets/game-over.wav').play();
+    } else {
+        new Audio('/assets/wrong.wav').play();
     }
 }
 
