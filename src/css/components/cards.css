@@ -1,0 +1,37 @@
+.cards {
+    margin: auto 0;
+}
+
+.cards__list {
+    display: grid;
+    list-style: none;
+    grid-template-rows: repeat(3, 1fr);
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+}
+
+.card {
+    height: 25vh;
+    width: 15vw;
+    background: #F8F6F2;
+    border-radius: 0.5rem;
+    box-shadow: -6px 10px 13px 0px rgba(0,0,0,0.16);
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}
+
+.card__image {
+    width: auto;
+    height: auto;
+    margin: 1rem 0;
+}
+
+
+li[data-is-set="true"] {
+    background: red;
+}
+
+.card--isSelected {
+    border: solid aquamarine 2px;
+}
