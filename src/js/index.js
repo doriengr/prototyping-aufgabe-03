@@ -21,7 +21,7 @@ function handleSelectedCards(htmlCard, index) {
 
     if (selectedCards.length === 3) {
         if (checkIfSet()) {
-            const newCards = deck.redrawRevealedCards();
+            const newCards = deck.redrawCards();
             // eventListener(newCards);
             selectedCards = [];
         } else {
@@ -32,33 +32,21 @@ function handleSelectedCards(htmlCard, index) {
 
 function checkIfSet() {
     const matchingCards = [
-        deck.revealedCards[selectedCards[0]],
-        deck.revealedCards[selectedCards[1]],
-        deck.revealedCards[selectedCards[2]],
+        deck.cards[selectedCards[0]],
+        deck.cards[selectedCards[1]],
+        deck.cards[selectedCards[2]],
     ];
 
     if (isSet(matchingCards[0], matchingCards[1], matchingCards[2])) {
-        deck.htmlCards.forEach((htmlCard, index) => {
+        deck.cards.forEach((card, index) => {
             if (selectedCards.includes(index)) {
-                htmlCard.remove();
+                card.remove();
             }
         })
-        deck.htmlCards = document.querySelectorAll('.card');
-        deleteSetFromRevealedCards();
-
+        deck.cards = document.querySelectorAll('.card');
         return true;
     }
     return false;
-}
-
-function deleteSetFromRevealedCards() {
-    selectedCards.forEach(selectedCard => {
-        delete deck.revealedCards[selectedCard];
-    })
-    deck.revealedCards = Array(deck.revealedCards.length - 1)
-        .fill(null)
-        .map((_, i) => { return deck.revealedCards[i + 1] })
-        .filter(Boolean);
 }
 
 function deleteIndex(index, htmlCard) {
@@ -75,5 +63,5 @@ function addIndex(index, htmlCard) {
 
 function init() {
     deck.init();
-    eventListener(Array.from(deck.htmlCards));
+    eventListener(Array.from(deck.cards));
 }

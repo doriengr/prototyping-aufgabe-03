@@ -3,8 +3,7 @@ import { isSet } from "./isSet.js";
 export class Deck {
     constructor() {
         this.htmlList = document.querySelector('.cards__list');
-        this.htmlCards = document.querySelectorAll('.card');
-        this.revealedCards = [];
+        this.cards = document.querySelectorAll('.card');
         this.deck = [];
 
         this.colors = ['red', 'yellow', 'green', 'blue'];
@@ -14,15 +13,10 @@ export class Deck {
 
     init() {
         this.initDeck();
-        this.initRevealCards();
-
-        while (! this.hasMatchingSet()) {
-            this.revealedCards = [];
-            this.initRevealCards();
-        }
-
+        this.initCards();
+        while (! this.hasMatchingSet()) this.initCards();
         this.filterDeck();
-        this.printCards(this.htmlCards);
+        this.printCards();
     }
 
     initDeck() {
@@ -35,40 +29,41 @@ export class Deck {
         }
     }
 
-    initRevealCards() {
+    initCards() {
         let startIndexes = [];
 
-        this.htmlCards.forEach(htmlCard => {
+        this.cards.forEach(card => {
             let randomIndex;
             do {
                 randomIndex = Math.floor(Math.random() * this.deck.length);
             } while (startIndexes.includes(randomIndex));
 
             startIndexes.push(randomIndex);
-            this.revealedCards.push(this.deck[randomIndex]);
-            htmlCard.setAttribute('data-is-set', 'false');
+
+            card.setAttribute('data-color', this.deck[randomIndex].color);
+            card.setAttribute('data-form', this.deck[randomIndex].form);
+            card.setAttribute('data-rotation', this.deck[randomIndex].rotation);
+            card.setAttribute('data-is-set', 'false');
         });
     }
 
     filterDeck() {
         this.deck = this.deck.filter((newCard) =>
-            ! this.revealedCards.some((usedCard) =>
-                newCard.color === usedCard.color && newCard.rotation === usedCard.rotation && newCard.form === usedCard.form)
+            ! Array.from(this.cards).some((usedCard) =>
+                newCard.color === usedCard.getAttribute('color')
+                && newCard.rotation === usedCard.getAttribute('rotation')
+                && newCard.form === usedCard.getAttribute('from'))
         );
     }
 
     hasMatchingSet() {
-        for (let i = 0; i < this.revealedCards.length - 2; i++) {
-            for (let j = i + 1; j < this.revealedCards.length - 1; j++) {
-                for (let k = j + 1; k < this.revealedCards.length; k++) {
-                    if (isSet(this.revealedCards[i], this.revealedCards[j], this.revealedCards[k])) {
-                        this.htmlCards[i].setAttribute('data-is-set', 'true');
-                        this.htmlCards[j].setAttribute('data-is-set', 'true');
-                        this.htmlCards[k].setAttribute('data-is-set', 'true');
-
-                        this.revealedCards[i].isSet = true;
-                        this.revealedCards[j].isSet = true;
-                        this.revealedCards[k].isSet = true;
+        for (let i = 0; i < this.cards.length - 2; i++) {
+            for (let j = i + 1; j < this.cards.length - 1; j++) {
+                for (let k = j + 1; k < this.cards.length; k++) {
+                    if (isSet(this.cards[i], this.cards[j], this.cards[k])) {
+                        this.cards[i].setAttribute('data-is-set', 'true');
+                        this.cards[j].setAttribute('data-is-set', 'true');
+                        this.cards[k].setAttribute('data-is-set', 'true');
                         return true;
                     }
                 }
@@ -77,19 +72,19 @@ export class Deck {
         return false;
     }
 
-    redrawRevealedCards() {
-        const missingCardsCount = 9 - this.htmlCards.length;
+    redrawCards() {
+        const missingCardsCount = 9 - this.cards.length;
         if (missingCardsCount === 0) return [];
 
-        const newRevealedCards = this.generateNewRevealedCards(missingCardsCount);
+        const newRevealedCards = this.generateNewCards(missingCardsCount);
         this.displayNewHtmlCards(newRevealedCards);
 
         return newRevealedCards;
     }
 
-    generateNewRevealedCards(missingCardsCount) {
+    generateNewCards(missingCardsCount){
         const newRevealedCards = [];
-        const combinations = this.findCombinations(this.revealedCards.slice(), 2);
+        const combinations = this.findCombinations(Array.from(this.cards).slice(), 2);
 
         for (const combination of combinations) {
             const matchingCard = this.findMatchingCardInDeck(combination);
@@ -97,7 +92,6 @@ export class Deck {
             if (matchingCard) {
                 newRevealedCards.push(matchingCard);
                 matchingCard.isSet = true;
-                this.highlightSet(combination);
                 this.deck = this.deck.filter(card => card !== matchingCard);
             } else {
                 // TODO No matching cards in deck anymore
@@ -149,17 +143,14 @@ export class Deck {
         return combinations;
     }
 
-    printCards(cards) {
-        cards.forEach((htmlCard, index) => {
+    printCards() {
+        this.cards.forEach((card, index) => {
             const text = document.createElement("p");
-            text.innerHTML = `Color: ${this.revealedCards[index].color}<br>
-                Rotation: ${this.revealedCards[index].rotation}<br>
-                Form: ${this.revealedCards[index].form}}`;
+            text.innerHTML = `Color: ${card.dataset.color}<br>
+                Rotation: ${card.dataset.rotation}<br>
+                Form: ${card.dataset.rotation}}`;
 
-            if (this.revealedCards[index].isSet) {
-                htmlCard.classList.add('card--isSet');
-            }
-            htmlCard.appendChild(text);
+            card.appendChild(text);
         });
     }
 }
