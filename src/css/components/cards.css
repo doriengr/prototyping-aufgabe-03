@@ -23,11 +23,22 @@
 }
 
 .card__image {
-    width: auto;
+    width: 60%;
     height: auto;
-    margin: 1rem 0;
+    margin: 2rem;
 }
 
+.card__image--rotate-left {
+    transform: rotate(-90deg);
+}
+
+.card__image--rotate-right {
+    transform: rotate(90deg);
+}
+
+.card__image--rotate-full {
+    transform: rotate(180deg);
+}
 
 li[data-isSet="true"] {
     background: red;

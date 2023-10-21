@@ -8,7 +8,7 @@ export class Deck {
 
         this.colors = ['red', 'yellow', 'green', 'blue'];
         this.rotations = ['0', '90', '180', '-90'];
-        this.forms = ['heart', 'spades', 'diamonds', 'clubs'];
+        this.forms = ['hearts', 'spades', 'diamonds', 'clubs'];
     }
 
     init() {
@@ -16,7 +16,10 @@ export class Deck {
         this.initCards();
         while (! this.hasMatchingSet()) this.initCards();
         this.filterDeck();
-        this.printCards();
+
+        this.cards.forEach(card => {
+            card.appendChild(this.createImage(card.dataset.color, card.dataset.form, card.dataset.rotation));
+        });
     }
 
     initDeck() {
@@ -130,13 +133,9 @@ export class Deck {
 
     displayNewHtmlCard(card, isCardASet) {
         const newHtmlCard = document.createElement("li");
-        const text = document.createElement("p");
-        text.innerHTML = `Color: ${card.color}<br>
-            Rotation: ${card.rotation}<br>
-            Form: ${card.form}`;
-
-        newHtmlCard.appendChild(text);
+        newHtmlCard.appendChild(this.createImage(card.color, card.form, card.rotation));
         newHtmlCard.classList.add('card');
+
         newHtmlCard.setAttribute('data-isset', isCardASet);
         newHtmlCard.setAttribute('data-color', card.color);
         newHtmlCard.setAttribute('data-form', card.form);
@@ -173,15 +172,24 @@ export class Deck {
         return this.shuffleOptions(combinations);
     }
 
-    printCards() {
-        this.cards.forEach((card, index) => {
-            const text = document.createElement("p");
-            text.innerHTML = `Color: ${card.dataset.color}<br>
-                Rotation: ${card.dataset.rotation}<br>
-                Form: ${card.dataset.form}`;
+    createImage(color, form, rotation) {
+        const image = document.createElement('img');
+        image.src = `/assets/${form}-${color}.svg`;
+        image.classList.add('card__image');
 
-            card.appendChild(text);
-        });
+        switch (rotation) {
+            case '-90':
+                image.classList.add('card__image--rotate-left');
+                break;
+            case '90':
+                image.classList.add('card__image--rotate-right');
+                break;
+            case '180':
+                image.classList.add('card__image--rotate-full');
+                break;
+        }
+
+        return image;
     }
 
     shuffleOptions(combinations) {
