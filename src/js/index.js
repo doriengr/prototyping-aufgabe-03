@@ -3,11 +3,15 @@ import { isSet } from "./components/isSet.js";
 
 let deck = new Deck();
 let selectedCards = [];
+let livesWrapper = document.querySelector('.cards__count');
+
+let count = 3;
+let gameLost = false;
 
 init();
 
 function eventListener(cards) {
-    if (! cards) return;
+    if (! cards || gameLost) return;
 
     cards.forEach(card => {
         card.addEventListener('click', () =>  handleSelectedCards(card));
@@ -17,7 +21,7 @@ function eventListener(cards) {
 function handleSelectedCards(card) {
     const index = getIndex(card);
     if (index === -1) return;
-    if (selectedCards.length >= 3) return;
+    if (selectedCards.length >= 3 || gameLost) return;
 
     selectedCards.includes(index)
         ? deleteIndex(index, card)
@@ -28,8 +32,12 @@ function handleSelectedCards(card) {
             const newCards = deck.redrawCards();
             eventListener(newCards);
             selectedCards = [];
+            addCount();
         } else {
-            // TODO Statement for lost
+            document.querySelector('section').classList.add('section--lost');
+            selectedCards = [];
+            setTimeout(() => { resetClasses() }, 1000);
+            subtractCount();
         }
     }
 }
@@ -74,6 +82,38 @@ function addIndex(index, htmlCard) {
     selectedCards.push(index);
     htmlCard.classList.add('card--isSelected');
 }
+
+function resetClasses() {
+    document.querySelector('section').classList.remove('section--lost');
+    deck.cards.forEach(card => {
+        card.classList.remove('card--isSelected');
+    })
+}
+
+function addCount() {
+    count++
+    const newLive = document.createElement("img");
+    newLive.src = "assets/hearts-red.svg";
+    newLive.classList.add('cards__count-item');
+    livesWrapper.appendChild(newLive);
+    console.log(count);
+}
+
+function subtractCount() {
+    count--;
+
+    if (livesWrapper.children.length >= 0) {
+        livesWrapper.lastElementChild.remove();
+    }
+
+    if (livesWrapper.children.length === 0) {
+        document.querySelector('main').classList.add('main--full-game-lost');
+        gameLost = true;
+        const lost = document.querySelector('.lost');
+        if (lost) lost.classList.add('lost--show');
+    }
+}
+
 
 function init() {
     deck.init();

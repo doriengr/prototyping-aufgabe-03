@@ -1,5 +1,19 @@
 .cards {
-    margin: auto 0;
+    margin: auto;
+    max-width: 600px;
+}
+
+.cards__count {
+    padding: 2rem;
+    width: 100%;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.cards__count-item {
+    width: 2rem;
+    height: auto;
+    opacity: 0.5;
 }
 
 .cards__list {
@@ -7,25 +21,36 @@
     list-style: none;
     grid-template-rows: repeat(3, 1fr);
     grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
+    gap: 1rem;
+    padding: 1rem;
 }
 
 .card {
-    height: 25vh;
-    width: 15vw;
-    background: #F8F6F2;
     border-radius: 0.5rem;
-    box-shadow: -6px 10px 13px 0px rgba(0,0,0,0.16);
+    box-shadow: -6px 10px 13px 0px rgba(0,0,0,0.10);
     display: flex;
     justify-content: center;
     align-content: center;
     cursor: pointer;
+    transition: all 200ms ease-in-out;
+}
+
+.card:hover {
+    transform: scale(1.05);
 }
 
 .card__image {
     width: 60%;
     height: auto;
-    margin: 2rem;
+    margin: 0.5rem;
+}
+
+@media(min-width: 1024px) {
+    .card__image {
+        width: 60%;
+        height: auto;
+        margin: 2rem;
+    }
 }
 
 .card__image--rotate-left {
@@ -40,10 +65,16 @@
     transform: rotate(180deg);
 }
 
+/**
 li[data-isSet="true"] {
-    background: red;
+    background: #fff;
 }
+*/
 
 .card--isSelected {
-    border: solid aquamarine 2px;
+    background: rgba(127, 176, 105, 0.2);
+}
+
+.section--lost .card--isSelected {
+    background: rgba(237, 106, 90, 0.2);
 }

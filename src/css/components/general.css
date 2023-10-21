@@ -1,5 +1,6 @@
 .main {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-content: center;
     height: 100vh;
@@ -8,4 +9,8 @@
 
 body {
     background: #EAE3D7;
+}
+
+.main--full-game-lost {
+    background: rgba(237, 106, 90, 0.4);
 }

@@ -1,0 +1,16 @@
+.lost {
+    display: none;
+}
+
+.lost--show {
+    display: block;;
+}
+
+.lost__image {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 40vw;
+    z-index: 50;
+    transform: translate(-50%, -50%);
+}
