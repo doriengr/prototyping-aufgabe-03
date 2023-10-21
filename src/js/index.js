@@ -105,7 +105,7 @@ function addCount() {
     new Audio('/assets/successful.wav').play();
 
     const newLive = document.createElement("img");
-    newLive.src = "assets/hearts-red.svg";
+    newLive.src = "assets/hearts-red-normal.svg";
     newLive.classList.add('cards__count-item');
     livesWrapper.appendChild(newLive);
 }
