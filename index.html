@@ -9,16 +9,30 @@
 </head>
 <body>
     <main class="main">
+        <div class="start start--show">
+            <div class="start__overlay"></div>
+            <button class="start__button">
+                <img src="assets/play.svg" class="start__image">
+            </button>
+        </div>
         <div class="lost">
             <img src="assets/heartbroken.svg" class="lost__image">
         </div>
         <div class="win">
             <img src="assets/win.svg" class="win__image">
         </div>
-        <div class="cards__count">
-            <img src="assets/hearts-red-normal.svg" class="cards__count-item">
-            <img src="assets/hearts-red-normal.svg" class="cards__count-item">
-            <img src="assets/hearts-red-normal.svg" class="cards__count-item">
+        <div class="cards__header">
+            <div class="cards__count">
+                <img src="assets/hearts-red-normal.svg" class="cards__count-item">
+                <img src="assets/hearts-red-normal.svg" class="cards__count-item">
+                <img src="assets/hearts-red-normal.svg" class="cards__count-item">
+            </div>
+            <div class="cards__time">
+                <svg class="clock" width="116" height="116" viewBox="0 0 116 116" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle class="clock__circle" cx="57.635" cy="57.635" r="57.635" fill="#1B9AAA"/>
+                    <rect class="clock__time" x="55" y="12" width="5" height="46" rx="2.5" fill="#0E4F58"/>
+                </svg>
+            </div>
         </div>
         <section class="cards">
             <ul class="cards__list">

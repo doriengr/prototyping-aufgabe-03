@@ -1,21 +1,65 @@
-.lost, .win {
+.lost, .win, .start {
     display: none;
 }
 
-.lost--show {
-    display: block;;
-}
-
-.win--show {
-    display: block;;
+.lost--show,
+.win--show,
+.start--show {
+    display: block;
 }
 
 .lost__image,
-.win__image {
+.win__image,
+.start__image {
     position: absolute;
     top: 50%;
     left: 50%;
     width: 40vw;
     z-index: 50;
     transform: translate(-50%, -50%);
+}
+
+.start__button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20vw;
+    z-index: 50;
+    border: none;
+    transform: translate(-50%, -50%);
+}
+
+.start__image {
+    z-index: 50;
+    box-shadow: 0 0 0 0 rgba(243, 183, 0, 1);
+    animation: pulse 2s infinite;
+    border-radius: 100%;
+    cursor: pointer;
+}
+
+.start__overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(171, 161, 145, 0.8);
+    z-index: 40;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(0.95) translate(-50%, -50%);
+        box-shadow: 0 0 0 0 rgba(243, 183, 0, 0.7);
+    }
+
+    70% {
+        transform: scale(1) translate(-50%, -50%);
+        box-shadow: 0 0 0 10px rgba(243, 183, 0, 0);
+    }
+
+    100% {
+        transform: scale(0.95) translate(-50%, -50%);
+        box-shadow: 0 0 0 0 rgba(243, 183, 0, 0);
+    }
 }

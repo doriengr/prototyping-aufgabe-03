@@ -1,10 +1,22 @@
 .cards {
-    margin: auto;
-    max-width: 600px;
+    max-width: 550px;
+    margin: 0 auto;
+}
+
+.cards__header {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem 1rem 0 1rem;
+    align-items: center;
+}
+
+@media(min-width: 1024px) {
+    .cards__header {
+        padding: 2rem 2rem 0 2rem;
+    }
 }
 
 .cards__count {
-    padding: 2rem;
     width: 100%;
     display: flex;
     gap: 0.5rem;
@@ -14,6 +26,34 @@
     width: 2rem;
     height: auto;
     opacity: 0.5;
+}
+
+.clock {
+    width: 3rem;
+    height: auto;
+}
+
+@media(min-width: 1024px) {
+    .clock {
+        width: 4rem;
+    }
+}
+
+.clock__time {
+    transform-origin: center;
+    transition: all 200ms ease-in-out;
+}
+
+.clock--animate-slow .clock__time {
+    animation: rotation 5s infinite;
+}
+
+.clock--animate-fast .clock__time {
+    animation: rotation 2.5s infinite;
+}
+
+.clock--animate-super-fast .clock__time {
+    animation: rotation 1.5s infinite;
 }
 
 .cards__list {
@@ -77,4 +117,12 @@ li[data-isSet="true"] {
 
 .section--lost .card--isSelected {
     background: rgba(237, 106, 90, 0.2);
+}
+
+@keyframes rotation {
+    0% { transform: rotate(0deg) }
+    25% { transform: rotate(90deg) }
+    50% { transform: rotate(180deg) }
+    75% { transform: rotate(270deg) }
+    100% { transform: rotate(360deg) }
 }

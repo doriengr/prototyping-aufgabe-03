@@ -4,17 +4,35 @@ import { isSet } from "./components/isSet.js";
 let deck = new Deck();
 let selectedCards = [];
 let livesWrapper = document.querySelector('.cards__count');
+let startButton = document.querySelector('.start__button');
+let clock = document.querySelector('.clock');
 
 let count = 3;
-let gameEnd = false;
+const totalTime = 60000;
+let gameEnd = true;
+let startTime;
+let timerId;
 
 init();
 
+function toggleGamePlay() {
+    startButton.addEventListener('click', function() {
+        let startScreen = document.querySelector('.start');
+        startScreen.classList.remove('start--show');
+        clock.classList.add('clock--animate-slow');
+        gameEnd = false;
+
+        startTimer();
+    })
+}
+
 function eventListener(cards) {
-    if (! cards || gameEnd) return;
+    if (! cards) return;
 
     cards.forEach(card => {
         card.addEventListener('click', function() {
+            if (gameEnd) return;
+
             handleSelectedCards(card);
             new Audio('/assets/key.wav').play();
         });
@@ -34,11 +52,7 @@ function handleSelectedCards(card) {
         if (checkIfSet()) {
             const newCards = deck.redrawCards();
             if (newCards.length === 0) {
-                gameEnd = true;
-                const win = document.querySelector('.win');
-                document.querySelector('main').classList.add('main--full-game-won');
-                if (win) win.classList.add('win--show');
-                new Audio('/assets/game-won.mp3').play();
+                gameWon();
             }
             eventListener(newCards);
             selectedCards = [];
@@ -117,19 +131,62 @@ function subtractCount() {
         livesWrapper.lastElementChild.remove();
     }
 
-    if (livesWrapper.children.length === 0) {
-        document.querySelector('main').classList.add('main--full-game-lost');
-        gameEnd = true;
-        const lost = document.querySelector('.lost');
-        if (lost) lost.classList.add('lost--show');
-        new Audio('/assets/game-over.wav').play();
-    } else {
-        new Audio('/assets/wrong.wav').play();
+    livesWrapper.children.length === 0
+        ? gameOver()
+        : new Audio('/assets/wrong.wav').play();
+}
+
+function gameOver() {
+    document.querySelector('main').classList.add('main--full-game-lost');
+    gameEnd = true;
+    const lost = document.querySelector('.lost');
+    if (lost) lost.classList.add('lost--show');
+    new Audio('/assets/game-over.wav').play();
+}
+
+function gameWon() {
+    gameEnd = true;
+    const win = document.querySelector('.win');
+    document.querySelector('main').classList.add('main--full-game-won');
+    if (win) win.classList.add('win--show');
+    new Audio('/assets/game-won.mp3').play();
+    clearInterval(timerId);
+}
+
+function startTimer() {
+    startTime = Date.now();
+    timerId = setInterval(checkTimer, 1000); // Check every second
+}
+
+function checkTimer() {
+    if (gameEnd) {
+        clearInterval(timerId); // Stop the timer
+        return; // Exit the function if the game is over
+    }
+
+    const currentTime = Date.now();
+    const elapsedTime = currentTime - startTime;
+
+    if (elapsedTime >= totalTime / 2 && elapsedTime < (totalTime / 4) * 3) {
+        clock.classList.remove('clock--animate-slow');
+        clock.classList.add('clock--animate-fast');
+    } else if (elapsedTime >= (totalTime / 4) * 3) {
+        clock.classList.remove('clock--animate-fast');
+        clock.classList.add('clock--animate-super-fast');
+    }
+
+    if (elapsedTime >= totalTime) {
+        clock.classList.remove('clock--animate-super-fast');
+        clearInterval(timerId); // Stop the timer
+        gameOver();
+        console.log("The timer is complete.");
     }
 }
 
+startTimer();
 
 function init() {
+    toggleGamePlay();
     deck.init();
     eventListener(Array.from(deck.cards));
 }
