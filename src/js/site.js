@@ -12,7 +12,7 @@ const totalTime = 60000;
 let gameEnd = true;
 let startTime;
 let timerId;
-let clockSound;
+let clockSound = new Audio('/assets/clock.wav');
 
 init();
 
@@ -138,28 +138,29 @@ function subtractCount() {
 }
 
 function gameOver() {
+    stopClock();
     document.querySelector('main').classList.add('main--full-game-lost');
     gameEnd = true;
     const lost = document.querySelector('.lost');
     if (lost) lost.classList.add('lost--show');
     new Audio('/assets/game-over.wav').play();
-    clockSound.stop();
 }
 
 function gameWon() {
+    stopClock();
     gameEnd = true;
     const win = document.querySelector('.win');
     document.querySelector('main').classList.add('main--full-game-won');
     if (win) win.classList.add('win--show');
     new Audio('/assets/game-won.mp3').play();
     clearInterval(timerId);
-    clockSound.stop();
+    clock.classList.remove('clock--animate-super-fast', 'clock--animate-fast', 'clock--animate-slow');
 }
 
 function startTimer() {
     startTime = Date.now();
     timerId = setInterval(checkTimer, 1000); // Check every second
-    clockSound = new Audio('/assets/clock.wav').play();
+    clockSound.play();
 }
 
 function checkTimer() {
@@ -183,11 +184,13 @@ function checkTimer() {
         clock.classList.remove('clock--animate-super-fast');
         clearInterval(timerId); // Stop the timer
         gameOver();
-        console.log("The timer is complete.");
     }
 }
 
-startTimer();
+function stopClock() {
+    clockSound.pause();
+    clockSound.currentTime = 0;
+}
 
 function init() {
     toggleGamePlay();
