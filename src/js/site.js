@@ -12,6 +12,7 @@ const totalTime = 60000;
 let gameEnd = true;
 let startTime;
 let timerId;
+let clockSound;
 
 init();
 
@@ -142,6 +143,7 @@ function gameOver() {
     const lost = document.querySelector('.lost');
     if (lost) lost.classList.add('lost--show');
     new Audio('/assets/game-over.wav').play();
+    clockSound.stop();
 }
 
 function gameWon() {
@@ -151,11 +153,13 @@ function gameWon() {
     if (win) win.classList.add('win--show');
     new Audio('/assets/game-won.mp3').play();
     clearInterval(timerId);
+    clockSound.stop();
 }
 
 function startTimer() {
     startTime = Date.now();
     timerId = setInterval(checkTimer, 1000); // Check every second
+    clockSound = new Audio('/assets/clock.wav').play();
 }
 
 function checkTimer() {
